@@ -1,11 +1,16 @@
 ---
-import Welcome from '../components/Welcome.astro';
+
+import ThreeJsProjects from '../components/ThreeJsProjects.vue';
 import Layout from '../layouts/Layout.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
-	<Welcome />
+	<div class="h-full w-full bg-gradient-to-b ">
+		<div class="relative w-full h-full flex items-start justify-center">			
+			<div class="relative z-10 w-full mx-auto px-4 h-full">
+				<ThreeJsProjects client:load />
+			</div>
+		</div>
+	</div>
 </Layout>
