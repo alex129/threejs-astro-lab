@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount } from "vue";
 import * as THREE from "three";
-import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js";
-import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
 
 let scene: THREE.Scene;
 let camera: THREE.PerspectiveCamera;
@@ -13,6 +11,7 @@ let mouse = new THREE.Vector2();
 
 const init = () => {
   scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x000000);
   camera = new THREE.PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,
@@ -20,50 +19,41 @@ const init = () => {
     1000
   );
 
-  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
   renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x000000);
   document.querySelector("#canvas-container")?.appendChild(renderer.domElement);
 
-  // Add lights
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
   scene.add(ambientLight);
   const pointLight = new THREE.PointLight(0xffffff, 1);
   pointLight.position.set(5, 5, 5);
   scene.add(pointLight);
 
-  // Create 3D text
-  const loader = new FontLoader();
-  loader.load(
-    "https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap∏",
-    function (font) {
-      const textGeometry = new TextGeometry("ADLPR", {
-        font: font,
-        size: 0.5,
-        curveSegments: 12,
-        bevelEnabled: true,
-        bevelThickness: 0.03,
-        bevelSize: 0.02,
-        bevelOffset: 0,
-        bevelSegments: 5,
-      });
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+  if (context) {
+    canvas.width = 256;
+    canvas.height = 128;
 
-      const material = new THREE.MeshPhongMaterial({
-        color: 0x00ff00,
-        specular: 0x555555,
-        shininess: 30,
-      });
+    context.fillStyle = "#000000";
+    context.fillRect(0, 0, canvas.width, canvas.height);
 
-      text = new THREE.Mesh(textGeometry, material);
+    context.font = "bold 60px Arial";
+    context.textAlign = "center";
+    context.fillStyle = "#ffffff";
+    context.fillText("ADLPR", canvas.width / 2, canvas.height / 2);
 
-      // Center the text
-      textGeometry.computeBoundingBox();
-      const textWidth =
-        textGeometry.boundingBox!.max.x - textGeometry.boundingBox!.min.x;
-      text.position.x = -textWidth / 2;
+    const texture = new THREE.CanvasTexture(canvas);
+    const material = new THREE.MeshBasicMaterial({
+      map: texture,
+      transparent: true,
+    });
 
-      scene.add(text);
-    }
-  );
+    const geometry = new THREE.PlaneGeometry(2, 1);
+    text = new THREE.Mesh(geometry, material);
+    scene.add(text);
+  }
 
   camera.position.z = 5;
 };
@@ -72,11 +62,9 @@ const animate = () => {
   frameId = requestAnimationFrame(animate);
 
   if (text) {
-    // Apply effects based on mouse position
     text.rotation.x = mouse.y * 0.5;
     text.rotation.y = mouse.x * 0.5;
 
-    // Add some floating animation
     text.position.y = Math.sin(Date.now() * 0.001) * 0.1;
   }
 
@@ -114,7 +102,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div id="canvas-container" class="w-full h-full"></div>
+  <div id="canvas-container" class="w-full h-full bg-black"></div>
 </template>
 
 <style lang="scss" scoped>
