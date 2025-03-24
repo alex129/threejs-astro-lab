@@ -1,0 +1,10 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SquareComponent from '../components/Square.vue';
+---
+
+<Layout>
+	<main class="h-full w-full">
+        <SquareComponent client:load />
+	</main>
+</Layout>
