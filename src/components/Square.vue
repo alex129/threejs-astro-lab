@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref } from "vue";
 import * as THREE from "three";
+import gsap from "gsap";
 
 const canvas = ref<HTMLCanvasElement>();
 let scene: THREE.Scene;
 let camera: THREE.PerspectiveCamera;
 let renderer: THREE.WebGLRenderer;
 let cube: THREE.Mesh;
-let animationFrameId: number;
 
 const init = () => {
   scene = new THREE.Scene();
@@ -31,9 +31,18 @@ const init = () => {
 };
 
 const animate = () => {
-  cube.rotation.y += 0.01;
-  renderer.render(scene, camera);
-  animationFrameId = requestAnimationFrame(animate);
+  gsap.to(cube.rotation, {
+    y: cube.rotation.y + Math.PI * 0.5,
+    duration: 2,
+    ease: "none",
+    repeat: -1,
+  });
+
+  const render = () => {
+    renderer.render(scene, camera);
+    requestAnimationFrame(render);
+  };
+  render();
 };
 
 onMounted(() => {
@@ -41,7 +50,7 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  cancelAnimationFrame(animationFrameId);
+  gsap.killTweensOf(cube.rotation);
   renderer?.dispose();
 });
 </script>

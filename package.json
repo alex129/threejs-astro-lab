@@ -12,6 +12,7 @@
     "@astrojs/vue": "^5.0.7",
     "@tailwindcss/vite": "^4.0.14",
     "astro": "^5.5.2",
+    "gsap": "3.12",
     "lil-gui": "^0.20.0",
     "tailwindcss": "^4.0.14",
     "three": "^0.174.0",
