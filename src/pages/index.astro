@@ -1,32 +1,96 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import ProjectPreview from '../components/ProjectPreview.vue';
+
+const projects = [
+	{
+		name: 'ADLPR Text Animation',
+		description: 'Text animation using Three.js',
+		link: '/adlpr'
+	},
+	{
+		name: 'Text Strength Effect',
+		description: 'Interactive text strength visualization',
+		link: '/text-strength'
+	},
+	{
+		name: 'Square Animation',
+		description: 'Animated square patterns',
+		link: '/square'
+	},
+	{
+		name: 'Text Playground',
+		description: 'Interactive text playground with Three.js',
+		link: '/text-playground'
+	}
+];
 ---
 
-<Layout>
-	<div class="h-full w-full bg-gradient-to-b">
-		<div class="relative w-full h-full flex items-center justify-center">			
-			<div class="relative z-10 w-full max-w-lg mx-auto px-4">
-				<h1 class="text-3xl font-bold text-center mb-8">Three.js Projects</h1>
-				<nav>
-					<ul class="space-y-4">
-						<li>
-							<a href="/adlpr" class="block w-full p-4 text-center bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20 hover:text-blue-400 transition-all">
-								ADLPR Text Animation
-							</a>
-						</li>
-						<li>
-							<a href="/text-strength" class="block w-full p-4 text-center bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20 hover:text-blue-400 transition-all">
-								Text Strength Effect
-							</a>
-						</li>
-						<li>
-							<a href="/square" class="block w-full p-4 text-center bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20 hover:text-blue-400 transition-all">
-								Square Animation
-							</a>
-						</li>
-					</ul>
-				</nav>
-			</div>
+<Layout title="Three.js Projects">
+	<main class="max-w-7xl mx-auto px-8 py-8">
+		<h1 class="text-4xl font-bold text-gray-800 mb-8">Projects Lab</h1>
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+			{projects.map((project) => (
+				<div class="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden">
+					<a href={project.link} class="block">
+						<ProjectPreview client:load url={project.link} title={project.name} />
+						<h2 class="text-xl font-semibold text-gray-800 mt-4 mb-2">{project.name}</h2>
+						<p class="text-gray-600">{project.description}</p>
+					</a>
+				</div>
+			))}
 		</div>
-	</div>
+	</main>
 </Layout>
+
+<style>
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 2rem;
+	}
+
+	h1 {
+		font-size: 2.5rem;
+		margin-bottom: 2rem;
+		color: #333;
+	}
+
+	.projects-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+		gap: 2rem;
+	}
+
+	.project-card {
+		background: white;
+		border-radius: 12px;
+		padding: 1.5rem;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.project-card:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+	}
+
+	.project-card a {
+		text-decoration: none;
+		color: inherit;
+		display: block;
+	}
+
+	.project-card h2 {
+		font-size: 1.5rem;
+		margin: 1rem 0 0.5rem;
+		color: #2c3e50;
+	}
+
+	.project-card p {
+		color: #666;
+		line-height: 1.5;
+	}
+</style>
