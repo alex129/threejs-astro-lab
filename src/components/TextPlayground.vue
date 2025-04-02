@@ -101,7 +101,7 @@ const createText = () => {
   velocities = [];
 
   const loader = new FontLoader();
-  loader.load("/fonts/helvetiker_regular.typeface.json", (font) => {
+  loader.load("https://threejs.org/examples/fonts/helvetiker_regular.typeface.json", (font) => {
     const textGeometry = new TextGeometry(config.text, {
       font: font,
       size: config.fontSize,
